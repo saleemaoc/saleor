@@ -193,6 +193,28 @@ def test_retrieve_product_attributes(
 
 @pytest.mark.django_db
 @pytest.mark.count_queries(autouse=False)
+def test_retrieve_product_images(product_list, api_client, count_queries, channel_USD):
+    query = """
+        query($sortBy: ProductOrder, $channel: String) {
+          products(first: 10, sortBy: $sortBy, channel: $channel) {
+            edges {
+              node {
+                id
+                images {
+                  id
+                }
+              }
+            }
+          }
+        }
+    """
+
+    variables = {"channel": channel_USD.slug}
+    get_graphql_content(api_client.post_graphql(query, variables))
+
+
+@pytest.mark.django_db
+@pytest.mark.count_queries(autouse=False)
 def test_retrieve_channel_listings(
     product_list_with_many_channels,
     staff_api_client,
