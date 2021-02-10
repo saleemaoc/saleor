@@ -24,6 +24,7 @@ from graphql.error import format_error as format_graphql_error
 from graphql.execution import ExecutionResult
 from jwt.exceptions import PyJWTError
 
+from .. import __version__ as saleor_version
 from ..core.exceptions import PermissionDenied, ReadOnlyException
 from ..core.utils import is_valid_ipv4, is_valid_ipv6
 
@@ -386,4 +387,6 @@ def obj_set(obj, path, value, do_not_replace):
 
 
 def generate_cache_key(raw_query: str) -> str:
-    return hashlib.sha256(str(raw_query).encode("utf-8")).hexdigest()
+    hashed_query = hashlib.sha256(str(raw_query).encode("utf-8")).hexdigest()
+    print(f"{saleor_version}-{hashed_query}")
+    return f"{saleor_version}-{hashed_query}"
